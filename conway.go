@@ -1,7 +1,6 @@
 package main
 
 import (
-	"conway/universe"
 	"fmt"
 	"math/rand"
 	"time"
@@ -40,8 +39,8 @@ func (universe *Universe) sumNeighbours(i, j int) int {
 
 	cols, rows := universe.cols, universe.rows
 
-	for dx := (i - 1 + rows) % rows; dx <= (i+1+rows)%rows; dx++ {
-		for dy := (j - 1 + cols) % cols; dy <= (j+1+cols)%cols; dy++ {
+	for dx := (i - 1 + rows) % rows; dx <= (i + 1) % rows; dx++ {
+		for dy := (j - 1 + cols) % cols; dy <= (j + 1) % cols; dy++ {
 			if dx != i || dy != j {
 				sum += universe.get(dx, dy)
 			}
@@ -60,7 +59,7 @@ func (universe *Universe) Lives(i, j int) bool {
 // NextGeneration returns a new Universe with the state of the next iteration
 // of the universe
 func (universe *Universe) NextGeneration() *Universe {
-	newUniverse := New(universe.rows, universe.cols)
+	newUniverse := NewUniverse(universe.rows, universe.cols)
 
 	for i := 0; i < universe.rows; i++ {
 		for j := 0; j < universe.cols; j++ {
@@ -106,7 +105,7 @@ func (universe *Universe) Populate(threshold int) {
 }
 
 // New returns a new Conway's Game of Life universe
-func New(rows, cols int) *Universe {
+func NewUniverse(rows, cols int) *Universe {
 	universe := &Universe{cols: cols, rows: rows, content: make([]int, cols*rows)}
 	return universe
 }
@@ -117,7 +116,7 @@ var ch = make(chan int, 1)
 func main() {
 	rand.Seed(time.Now().Unix())
 
-	u := universe.New(rows, cols)
+	u := NewUniverse(rows, cols)
 
 	u.Populate(threshold)
 	u.Show()
